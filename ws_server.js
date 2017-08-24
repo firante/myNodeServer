@@ -21,22 +21,31 @@ MongoClient.connect('mongodb://firante:rce15their@ds021691.mlab.com:21691/firant
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// ---- Cross origin access configuration ----
+app.use(function (req, res, next) {
+  // Website you wish to allow to connect
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+  // Request methods you wish to allow
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  // Request headers you wish to allow
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type');
+  // Set to true if you need the website to include cookies in the requests sent
+  // to the API (e.g. in case you use sessions)
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  // Pass to next layer of middleware
+  next();
+});
+
 router.get('/', function(req, res) {
-  res.header ('Access-Control-Allow-Origin', '*');
-  res.header ('Access-Control-Allow-Credentials', true);
-  res.header ('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
-  res.header ('Access-Control-Allow-Headers', 'Content-Type');
   res.send('Hello Seattle\n');
 });
 
 router.route('/login')
   .post((req, res) => {
-    console.log('POST');
-    res.send('POST');
-  })
-  .get((req, res) => {
-    console.log('GET');
-    res.send('GET');
+    const { username, password, email } = req.body.body;
+    console.log(email);
+    res.send('true');
   });
+
 app.use('/api', router);
 app.listen(9999);

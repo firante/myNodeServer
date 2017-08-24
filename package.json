@@ -1,0 +1,26 @@
+{
+  "name": "mynode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ws_server.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongodb": "^2.2.31",
+    "websocket": "^1.0.24"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/Fedorovych/mynode.git"
+  },
+  "author": "Misha Fedorovych",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/Fedorovych/mynode/issues"
+  },
+  "homepage": "https://gitlab.com/Fedorovych/mynode#README"
+}
