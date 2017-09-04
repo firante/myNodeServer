@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const router = express.Router();
 
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 // --- creating users collection ---
 MongoClient.connect('mongodb://firante:rce15their@ds021691.mlab.com:21691/firantebase', (err, db) => {
   if(err) {
@@ -61,7 +62,14 @@ router.route('/register')
 	  if(user) {
 	    res.status(200).send({ message: 'Email is excist!' });
 	  } else {
-	    db.insert({ profile: { username, email, hash: bcrypt.hashSync(password, SECRET_HASH) } });
+	    db.insertOne({ profile: { username, email, hash: bcrypt.hashSync(password, SECRET_HASH) } })
+	      .then((res) => {
+		const token = jwt.sign({ username, email }, SECRET_HASH, { expiresIn: '7d' });
+		res.status(200).send({ message: 'logged In', username, token });
+	      })
+	      .catch((err) => {
+		res.satus(500).send('Account was not created!');
+	      });
 	  }
 	});
       }
