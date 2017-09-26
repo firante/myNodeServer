@@ -53,29 +53,30 @@ router.route('/register')
   .post((req, res) => {
     const SECRET_HASH = process.env.SECRET_HASH;
     const { username, password, email } = req.body.body;
-    MongoClient.connect('mongodb://firante:rce15their@ds021691.mlab.com:21691/firantebase', (err, db) => {
-      if(err) {
-	console.log(err);
-      } else {
-	db.findOne({ "profile.email": email }, (err, user) => {
-	  if(err) res.status(500).send('Server Error! Registration failed!');
-	  if(user) {
-	    res.status(200).send({ message: 'Email is excist!' });
-	  } else {
-	    db.insertOne({ profile: { username, email, hash: bcrypt.hashSync(password, SECRET_HASH) } })
-	      .then((res) => {
-		const token = jwt.sign({ username, email }, SECRET_HASH, { expiresIn: '7d' });
-		res.status(200).send({ message: 'logged In', username, token });
-	      })
-	      .catch((err) => {
-		res.satus(500).send('Account was not created!');
-	      });
-	  }
-	});
-      }
-    });
-
-    res.send('true');
+    try {
+      MongoClient.connect('mongodb://firante:rce15their@ds021691.mlab.com:21691/firantebase', (err, db) => {
+	if(err) {
+	  console.log(err);
+	} else {
+	  db.collection('users').findOne({ "profile.email": email }, (err, user) => {
+	    if(err) res.status(500).send('Server Error! Registration failed!');
+	    if(user) {
+	      res.status(200).send({ message: 'Email is excist!' });
+	    } else {
+	      db.collection('users').insertOne({ profile: { username, email, hash: bcrypt.hashSync(password, 12) } })
+		.then((result) => {
+		  const token = jwt.sign({ username, email }, SECRET_HASH, { expiresIn: '7d' });
+		  db.collection('users').update({'profile.email': email}, {$set: {'profile.token' : token}});
+		  res.status(200).send({ message: 'logged In', username, token });
+		}, ()=>{})
+		.catch((err) => {
+		  res.status(500).send('Account was not created!');
+		});
+	    }
+	  });
+	}
+      });
+    } catch(err) { console.log(err); }
   });
 
 app.use('/', router);

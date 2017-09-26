@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env SECRET_HASH=GNFYR76NHF90_jdh7^7HFUKDJ node ws_server.js"
+    "start": "cross-env SECRET_HASH=GNFYR76NHF90_jdh node ws_server.js"
   },
   "repository": {
     "type": "git",
