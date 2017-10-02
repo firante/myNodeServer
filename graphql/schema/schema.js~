@@ -1,0 +1,37 @@
+import {
+  GraphQLSchema,
+  GraphQLObjectType,
+  GraphQLString
+} from 'graphql';
+
+import profileType from './profile.js';
+
+const loginSchema = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: 'Query',
+    description: 'query to users',
+    fields: () =>({
+      id: {
+	type: GraphQLString,
+	description: 'user id',
+	async resolve(root, param) {
+	}
+      },
+      profile: {
+	type: profileType,
+	args: {
+	  username: { type: GraphQLString }
+	},
+	description: 'user profile',
+	async resolve(root, params) {
+	  const db = root.db;
+	  return await db.collection('users').findOne({ 'profile.username': params.username })
+	    .then(result => result.profile)
+	    .catch(err => console.log(err.stack));
+	}
+      }
+    })
+  })
+});
+
+export default loginSchema;

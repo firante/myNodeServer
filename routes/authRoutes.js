@@ -77,6 +77,7 @@ router.route('/login')
       MongoClient.connect(MONGO_URL, (err, db) => {
 	db.collection('users').findOne({ 'profile.email': email })
 	  .then((user) => {
+	    console.log(user)
 	    !user && res.status(200).send({ login_status: false, message: 'There is no registered user with this email!' });
 	    const hash = user.profile.hash;
 	    bcrypt.compare(password, hash)

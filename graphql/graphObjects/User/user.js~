@@ -1,0 +1,31 @@
+import {
+  GraphQLObjectType,
+  GraphQLString
+} from 'graphql';
+
+import profileType from './profile.js';
+
+const userType = new GraphQLObjectType({
+  name: 'user',
+  description: 'user object',
+  fields: () => ({
+    id: {
+      type: GraphQLString,
+      description: 'user field',
+      resolve(root, params) {
+	return root._id;
+      }
+    },
+    profile: {
+      type: profileType,
+      description: 'profile field',
+      resolve(root, params) {
+	const db = root.db;
+	return db.collection('users').findOne({ 'profile.username': params.username })
+	  .then(result => result.profile)
+	  .catch(err => console.log(err.stack));
+      }
+    }
+  })
+});
+export default userType;

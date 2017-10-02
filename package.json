@@ -3,20 +3,33 @@
   "version": "1.0.0",
   "description": "",
   "main": "ws_server.js",
+  "babel": {
+    "presets": [
+      "node5",
+      "stage-0"
+    ]
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
+    "cors": "^2.8.4",
     "express": "^4.15.3",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.11.6",
     "jsonwebtoken": "^7.4.3",
     "mongodb": "^2.2.31",
     "websocket": "^1.0.24"
   },
   "devDependencies": {
-    "cross-env": "^5.0.5"
+    "cross-env": "^5.0.5",
+    "babel-cli": "^6.7.5",
+    "babel-preset-node5": "^11.0.1",
+    "babel-preset-stage-0": "^6.5.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env SECRET_HASH=GNFYR76NHF90_jdh MONGO_URL=mongodb://firante:rce15their@ds021691.mlab.com:21691/firantebase node ws_server.js"
+    "start": "cross-env SECRET_HASH=GNFYR76NHF90_jdh MONGO_URL=mongodb://firante:rce15their@ds021691.mlab.com:21691/firantebase babel-node ws_server.js"
   },
   "repository": {
     "type": "git",
