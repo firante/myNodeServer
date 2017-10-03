@@ -20,7 +20,7 @@ const userType = new GraphQLObjectType({
       type: profileType,
       description: 'profile field',
       resolve(root, params) {
-	return root;
+	return root.profile;
       }
     }
   })

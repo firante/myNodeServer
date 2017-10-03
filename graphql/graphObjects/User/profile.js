@@ -14,23 +14,21 @@ const profileType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'username field',
       resolve(root, params) {
-	console.log(root)
-	return root.profile.username;
+	return root.username;
       }
     },
     email: {
       type: GraphQLString,
       description: 'username field',
       async resolve(root, params) {
-	return root.profile.email;
+	return root.email;
       }
     },
     token: {
       type: GraphQLString,
       description: 'username field',
       async resolve(root, params) {
-	const token = jwt.sign({ username: root.profile.username, email: root.profile.email }, SECRET_HASH, { expiresIn: '7d' });
-	return token;
+	return root.token;
       }
     }
   })

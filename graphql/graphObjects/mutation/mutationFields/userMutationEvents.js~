@@ -1,0 +1,20 @@
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+const SECRET_HASH = process.env.SECRET_HASH;
+
+exports.createUserEvent = (root, params) => {
+  const usersCollection = root.db.collection('users');
+  const 
+
+  usersCollection.insertOne({ profile: { username, email, hash: bcrypt.hashSync(password, 12) } })
+    .then((result) => {
+      const token = jwt.sign({ username, email }, SECRET_HASH, { expiresIn: '7d' });
+      db.collection('users').update({'profile.email': email}, {$set: {'profile.token' : token}});
+      res.status(200).send({ login_status: true, message: 'logged In', username, token });
+    }, ()=>{})
+    .catch((err) => {
+      res.status(500).send({login_status: false, message: 'Account was not created!'});
+    });
+
+};
