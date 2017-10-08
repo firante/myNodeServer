@@ -10,15 +10,22 @@ exports.createUserEvent = (root, params) => {
   const password = params.password;
   
   const usersCollection = root.db.collection('users');
-
-  return usersCollection.insertOne({ profile: { username, email, hash: bcrypt.hashSync(password, 12) } })
-    .then((result) => {
-      const token = jwt.sign({ username, email }, SECRET_HASH, { expiresIn: '7d' });
-      usersCollection.update({'profile.email': email}, {$set: {'profile.token' : token}});
-      const user = usersCollection.findOne({ "_id": new ObjectId(result.insertedId) });
-      return user;
-    })
-    .catch((err) => {
-    });
-
+  const token = jwt.sign({ username, email }, SECRET_HASH, { expiresIn: '7d' });
+  return usersCollection.findOne({ 'profile.email': email })
+	.then(user => {
+	  if(user) {
+	    return { status: 'User with this email is exist!' };
+	  } else {
+	    return usersCollection.insertOne({ profile: { username, email, hash: bcrypt.hashSync(password, 12), token } })
+	      .then((result) => {
+		const user = usersCollection.findOne({ "_id": new ObjectId(result.insertedId) });
+		return user;
+	      })
+	      .catch((err) => {
+		console.log(err);
+	      });
+	    
+	  }
+	})
+	.catch(err => console.log(err));
 };

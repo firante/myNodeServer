@@ -9,6 +9,13 @@ const userType = new GraphQLObjectType({
   name: 'user',
   description: 'user object',
   fields: () => ({
+    status: {
+      type: GraphQLString,
+      description: 'status field',
+      resolve(root, params) {
+	return root.status;
+      }
+    },
     id: {
       type: GraphQLString,
       description: 'user field',
