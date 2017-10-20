@@ -5,8 +5,8 @@ import bodyParser from 'body-parser';
 import mongodb from 'mongodb';
 import cors from 'cors';
 
-import auth_routes from './routes/authRoutes.js';
 import schema from './graphql/schema/schema.js';
+import parsers from './pullData/parsers.js';
 
 const MONGO_URL = process.env.MONGO_URL;
 
@@ -33,8 +33,6 @@ MongoClient.connect(MONGO_URL, {promiseLibrary: Promise})
 
   });
 
-
-app.use('/', auth_routes);
 app.use('/graphql', graphql((req) => {
   return { schema,
 	   graphiql: true,
@@ -42,5 +40,7 @@ app.use('/graphql', graphql((req) => {
 	   rootValue: { db: req.app.locals.db }
 	 };
 }));
+
+parsers.planetaKino();
 
 app.listen(9999);
