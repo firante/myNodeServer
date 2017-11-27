@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import mongodb from 'mongodb';
 import cors from 'cors';
 
-import auth_routes from './routes/authRoutes.js';
 import schema from './graphql/schema/schema.js';
 
 const MONGO_URL = process.env.MONGO_URL;
