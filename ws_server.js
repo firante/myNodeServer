@@ -1,3 +1,4 @@
+
 import Promise from 'bluebird';
 import express from 'express';
 import graphql from 'express-graphql';
@@ -34,7 +35,6 @@ MongoClient.connect(MONGO_URL, {promiseLibrary: Promise})
   });
 
 
-app.use('/', auth_routes);
 app.use('/graphql', graphql((req) => {
   return { schema,
 	   graphiql: true,
