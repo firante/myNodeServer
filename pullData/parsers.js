@@ -5,7 +5,10 @@ const parsers = {
     axios.get('https://planetakino.ua/lvov/showtimes/')
       .then((response) => {
 	const dom = cheerio.load(response.data);
-	console.log(dom('.showtime-movie-container').html());
+	dom('.showtime-movie-container').each(function(index, value) {
+	  const name = dom(this).find('.movie-title a').text();
+	  
+	});
       })
       .catch(err => console.log(err));
   }
