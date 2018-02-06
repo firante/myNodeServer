@@ -63,6 +63,12 @@ const schema = new GraphQLSchema({
 		return ver && user;
 	      })
 	      .catch(err => false);
+	  } else if(params.username) {
+	    return await root.db.collection('users').findOne({ 'profile.username': params.username }, { 'profile.username': 1, _id: 0 })
+	      .then((user) => {
+		return user;
+	      })
+	      .catch(err => false);
 	  } else {
 	    return params.id && await root.db.collection('users').findOne({ "_id": new ObjectId(params.id) })
 	      .then(user => user)
