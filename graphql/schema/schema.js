@@ -1,7 +1,8 @@
 import {
   GraphQLSchema,
   GraphQLObjectType,
-  GraphQLString
+  GraphQLString,
+  GraphQLList
 } from 'graphql';
 import { ObjectId } from 'mongodb';
 import bcrypt from 'bcryptjs';
@@ -15,7 +16,7 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     description: 'query to users',
-    fields: () =>({
+    fields: () => ({
       user: {
 	type: User,
 	description: 'user type',
@@ -63,17 +64,38 @@ const schema = new GraphQLSchema({
 		return ver && user;
 	      })
 	      .catch(err => false);
-	  } else if(params.username) {
-	    return await root.db.collection('users').findOne({ 'profile.username': params.username }, { 'profile.username': 1, _id: 0 })
-	      .then((user) => {
-		return user;
-	      })
-	      .catch(err => false);
 	  } else {
 	    return params.id && await root.db.collection('users').findOne({ "_id": new ObjectId(params.id) })
 	      .then(user => user)
 	      .catch(err => false);
 	  }
+	}
+      },
+      isUsernameOrEmailExist: {
+	type: new GraphQLList(User),
+	description: 'check username email existing',
+	args: {
+	  username: { type: GraphQLString },
+	  email: { type: GraphQLString }
+	},
+	async resolve(root, params) {
+	  if (Object.keys(params).length === 0) return await [];
+	  
+	  const query = { };
+	  const qArr = [];
+	  params.username && qArr.push({ 'profile.username': params.username });
+	  params.email && qArr.push({ 'profile.email': params.email });
+	  
+	  if(qArr.length === 0) return await [];
+
+	  query['$or'] = qArr;
+	  
+	  return await root.db.collection('users').find(query, { 'profile.username': 1, 'profile.email': 1, _id: 0 })
+	    .toArray()
+	    .then((user) => {
+	      return user;
+	    })
+	    .catch(err => false);
 	}
       }
     })
