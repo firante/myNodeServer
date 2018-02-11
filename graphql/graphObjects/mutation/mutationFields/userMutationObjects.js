@@ -6,7 +6,7 @@ import {
 
 import User from '../../User/user.js';
 
-exports.createUser = {
+export const createUser = {
   type: User,
   description: 'create user object',
   args: {
@@ -14,5 +14,5 @@ exports.createUser = {
     email: { type: GraphQLString },
     password: { type: GraphQLString }
   },
-  resolve: (root, params) => createUserEvent(root, params)
+  resolve: createUserEvent
 };

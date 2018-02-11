@@ -10,9 +10,11 @@
     ]
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
+    "cheerio": "^1.0.0-rc.2",
     "cors": "^2.8.4",
     "express": "^4.15.3",
     "express-graphql": "^0.6.11",
