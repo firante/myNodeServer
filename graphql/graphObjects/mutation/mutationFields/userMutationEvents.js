@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 
 const SECRET_HASH = process.env.SECRET_HASH;
 
-exports.createUserEvent = (root, params) => {
+export const createUserEvent = (root, params) => {
   const username = params.username;
   const email = params.email;
   const password = params.password;
